@@ -73,10 +73,26 @@ class TestDiceGame(unittest.TestCase):
 
     # --- Students: Add 3 more test cases below ---
 
-
-
-
-
+    # Checks that play_round's total is the sum of the two dice, and that
+    # the result matches what evaluate_roll gives for that total.
+    def test_play_round_consistency(self):
+        for _ in range(100):
+            round_result = self.game.play_round()
+            self.assertEqual(round_result[2], round_result[0] + round_result[1])
+            self.assertEqual(round_result[3], self.game.evaluate_roll(round_result[2]))
+ 
+    # Checks that a die with a non-default number of sides works.
+    def test_die_custom_sides(self):
+        die = Die(sides=20)
+        self.assertEqual(die.sides, 20)
+        for _ in range(200):
+            self.assertIn(die.roll(), range(1, 21))
+ 
+    # evaluate_roll should give the same answer every time for the same total.
+    def test_evaluate_roll_is_consistent(self):
+        first = self.game.evaluate_roll(7)
+        second = self.game.evaluate_roll(7)
+        self.assertEqual(first, second)
 
 if __name__ == '__main__':
     unittest.main()
